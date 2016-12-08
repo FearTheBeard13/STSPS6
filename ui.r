@@ -15,6 +15,6 @@ shinyUI(pageWithSidebar(
   ),
   
   mainPanel(
-    plotOutput("plot", height = "800px")
+    plotOutput("plot")
   )
 ))

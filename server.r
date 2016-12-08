@@ -1,14 +1,16 @@
 read.data <- function(){
-  read.table("data.txt", sep = ";", header = TRUE, encoding = "UTF-8")
+  read.table("data.txt", sep = ";", header = TRUE, encoding = "UTF-8", check.names=FALSE)
 }
 
 data <- read.data()
 
-draw_ <- function(country, length){
+colors <- c("#FF0000", "#000cff", "#00ff0c", "#1a9b9d", "#750db1", "#1dc87a")
+
+draw_ <- function(countries, j){
   index <- 0
   
   for(i in 1:nrow(data)){
-    if(data[i, 1] == country){
+    if(data[i, 1] == countries[j]){
       index <- i
     }
   }
@@ -16,21 +18,26 @@ draw_ <- function(country, length){
   if(index == 0){
     return()
   }
-  
-  plot(2:25, data[index, 2:25], type = "o", xaxt = "n", xlab = "Years", ylab = "Rate of GDP")
-  title(data[index, 1])
-  axis(1, at = 1:length(data),  labels = names(data))
+ 
+  if(j == 1){
+    
+    plot(2:25, data[index, 2:25], type = "o", xaxt = "n",xlab = "Years", ylab = "Rate of GDP", col = colors[j], ylim = c(0,80000))
+    axis(1, at = 1:length(data), labels = colnames(data))
+  } else {
+    lines(2:25, data[index, 2:25], type = "o", xaxt = "n", xlab = "Years", ylab = "Rate of GDP", col = colors[j])
+  }
+  legend("topleft", legend = countries, col = colors, lty = 1)
 }
 
-draw <- function(country){
-  if(is.null(country)){
+
+draw <- function(countries){
+  if(is.null(countries)){
     return()
   }
   
-  par(mfrow = c(length(country), 1))
   
-  for(i in 1:length(country)){
-    draw_(country[i], length(country))
+  for(i in 1:length(countries)){
+    draw_(countries, i)
   }
 }
 
